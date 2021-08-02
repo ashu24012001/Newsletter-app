@@ -2,6 +2,7 @@ const express=require("express");
 const bodyParser=require("body-parser");
 const request=require("request");
 const https=require("https");
+const options=require(__dirname+"/options.js");
 
 const app=express();
 
@@ -33,11 +34,10 @@ app.post("/", function(req, res){
 
 const jsonData=JSON.stringify(data);
 const url="https://us6.api.mailchimp.com/3.0/lists/5ba1af656c";
-const options={
-  method:"POST",
-  auth:"ashutosh:feafe9d75dd5d3b0e52caa1e2b1ddddc-us6"
-}
-const request=https.request(url, options, function(response){
+
+const request=https.request(url, options.getOptions(), function(response){
+  // options.js has object options which has method=POST and auth=Username:API key
+  console.log(options.getOptions());
   response.on("data", function(data){
     console.log(JSON.parse(data));
     if(response.statusCode===200)
@@ -58,7 +58,3 @@ app.post("/failure", function(req, res){
 app.listen(process.env.PORT || 3000, function(){
   console.log("Server is running on port 3000");
 });
-// API key
-// feafe9d75dd5d3b0e52caa1e2b1ddddc-us6
-// List id:
-// 5ba1af656c
