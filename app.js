@@ -2,7 +2,7 @@ const express=require("express");
 const bodyParser=require("body-parser");
 const request=require("request");
 const https=require("https");
-const options=require(__dirname+"/options.js");
+const post=require(__dirname+"/post.js");
 
 const app=express();
 
@@ -33,11 +33,8 @@ app.post("/", function(req, res){
 
 
 const jsonData=JSON.stringify(data);
-const url="https://us6.api.mailchimp.com/3.0/lists/5ba1af656c";
-
-const request=https.request(url, options.getOptions(), function(response){
-  // options.js has object options which has method=POST and auth=Username:API key
-  console.log(options.getOptions());
+const request=https.request(post.getUrl(), post.getOptions(), function(response){
+  // post.js has an options object which has method=POST and auth=Username:API key and url which has list_id and last 3 digits of API key
   response.on("data", function(data){
     console.log(JSON.parse(data));
     if(response.statusCode===200)
